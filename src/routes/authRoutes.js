@@ -57,7 +57,7 @@ router.post('/logout', async (req, res) => {
 });
 
 
-// Rotas feitos pelo grupo Augusto César, Guilherme N., João Kaio e Rikelme R  ...
+// Rotas feitos pelo grupo Augusto César, Guilherme N., João Kaio e Rikelme R.  ...
 
 // Rota /refresh - Gerar novo access token a partir do refresh token
 router.post('/refresh', async (req, res) => {
