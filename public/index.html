@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Autenticação com JWT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-password" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+
+    <h1>Registro</h1>
+    <form id="register-form">
+      <input type="email" id="register-email" placeholder="Email" required />
+      <input type="password" id="register-password" placeholder="Senha" required />
+      <button type="submit">Registrar</button>
+    </form>
+
+    <div id="result"></div>
+
+    <button id="logout-btn" style="display: none;">Sair</button>
+  </div>
+
+  <script>
+    const resultDiv = document.getElementById('result');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const showMessage = (message, isSuccess = true) => {
+      resultDiv.innerText = message;
+      resultDiv.style.borderLeft = isSuccess ? '5px solid green' : '5px solid red';
+    };
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+
+      try {
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showMessage('Registro realizado com sucesso!', true);
+          document.getElementById('register-form').reset();
+        } else {
+          showMessage(`Erro ao registrar: ${data.error || data.message || 'Tente novamente'}`, false);
+        }
+      } catch (err) {
+        showMessage('Erro de conexão ao tentar registrar.', false);
+      }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showMessage('Login realizado com sucesso!', true);
+          document.getElementById('login-form').reset();
+          logoutBtn.style.display = 'inline-block';
+          console.log('Access Token:', data.accessToken);
+        } else {
+          showMessage(`Erro ao logar: ${data.error || data.message || 'Tente novamente'}`, false);
+        }
+      } catch (err) {
+        showMessage('Erro de conexão ao tentar logar.', false);
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      const email = prompt('Digite seu email para sair:');
+
+      if (!email) {
+        showMessage('Email não informado.', false);
+        return;
+      }
+
+      try {
+        const res = await fetch('/logout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showMessage('Logout realizado com sucesso!', true);
+          logoutBtn.style.display = 'none';
+        } else {
+          showMessage(` Erro ao fazer logout: ${data.error || data.message || 'Tente novamente'}`, false);
+        }
+      } catch (err) {
+        showMessage(' Erro de conexão ao tentar sair.', false);
+      }
+    });
+  </script>
+</body>
+</html>
