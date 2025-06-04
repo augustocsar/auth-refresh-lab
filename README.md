@@ -1,10 +1,10 @@
 # 🔐 Auth Refresh Lab - Sistema de Autenticação JWT
 
 ## 👥 Equipe
-- **Augusto César**
-- **Guilherme N.**
-- **João Kaio**
-- **Rikelme R.**
+- **Augusto César - 16024402**
+- **Guilherme N. - 16032030**
+- **João Kaio - 16031730**
+- **Rikelme R. - 16032935**
 
 ---
 
